@@ -79,7 +79,7 @@ myFunction = () -> {
 ```
 
 
-### Lamda Hands On
+## Lamda Hands On
 
 We Execute a lamda expression by calling a method on the interface which is the
 method that gave it the clue about what the expression type needs to be.
@@ -620,3 +620,416 @@ public class ScopesProblem {
 
 ```
 
+## Streams 
+
+### Streams is a single use declarative sequential data pipelines with lazy execution
+
+### Features of Streams Api
+
+- Streams are a different way of dealing with collections or it is 
+  another design pattern for processing elements inside a collection. 
+- It's a declarative approach
+- It uses lazy evaluation which makes it efficient.
+- Streams api and functional programming are a match made in heaven 
+  which supports composibility and parallel execution
+- As a result we have optimised performance.
+- Java streams are immutable.
+
+Stream Consists of :-
+
+- Create a Stream
+- Intermediate Operation
+- Terminal Operation
+
+
+```java
+
+public class IteratonDemo {
+
+     public void examine(List<String> list, Consumer<String> operator) {
+          for(String element : list){
+               operation.accept(element);
+          }
+     }
+
+     IterationDemo.examine(fruits, System.out::println);
+}
+
+```
+
+### Given a collection, you can create stream out of it
+
+```java
+
+public class StreamDemo {
+
+     public static void main (String [] args) {
+
+          List <String> names = List.of("Foo","Bar","Baz");
+     /*
+          Stream<String> stream = names.stream();
+          Consumer<String> print = str -> System.out::println;
+
+          stream.forEach(print)     // forEach takes in a Consumer as argument
+     */
+
+          Stream<String> stream = names.stream();
+          stream.forEach(System.out::println);         
+     }
+
+}
+
+```
+
+### Other ways to create stream
+
+```java
+
+public class StreamDemo {
+
+     public static void main (String [] args) {
+
+          Set <String> names = Set.of("Foo","Bar","Baz");
+
+          Stream<String> stream = names.stream();
+          stream.forEach(System.out::println);         
+     }
+
+}
+
+```
+
+### Other ways to create stream (From Arrays)
+
+```java
+
+public class StreamDemo {
+
+     public static void main (String [] args) {
+       
+         int [] numbers = {1,2,3,4,5,6};
+
+         Arrays.stream(numbers).forEach(System.out::println);
+       
+     }
+
+}
+
+```
+
+### Other ways to create stream (Using Stream.of())
+
+```java
+
+public class StreamDemo {
+
+     public static void main (String [] args) {
+       
+           Stream.of("mango","apple","banana").forEach(System.out::println);
+       
+     }
+
+}
+
+```
+
+### Create a stream from every line of a file (Using built in APIs that return stream)
+
+```java
+
+public class StreamDemo {
+
+     public static void main (String [] args throws IOException) {
+     
+          Stream<String> lines = Files.lines(Paths.get("README.md")); // Return stream of string
+          lines.forEach(System.out::println);
+
+     }
+}
+
+```
+
+### Create a infinite stream and limit it using a supplier.
+
+```java
+
+public class StreamDemo {
+
+     public static void main (String [] args throws IOException) {
+     
+//          Stream.generate(Math::random);
+            Stream.generate(new Random()::nextDouble)
+                  .limit(10)
+                  .forEach(System.out::println);
+
+     }
+}
+
+```
+
+### Create a stream of even numbers with iterate()
+
+```java
+
+public class StreamDemo {
+
+     public static void main (String [] args throws IOException) {
+     
+          // give a starting point & give a finction to get next value
+          // 0 , x -> x + 2 = 2
+          // 2 , x -> x + 2 = 4
+          // ...  
+          //0 2 4 6 8
+          Stream.iterate(0,x -> x + 2)
+               .limit(10)
+               .(forEach());
+     }
+     
+}
+
+```
+
+### Create a collection out of stream
+
+```java
+
+public class StreamDemo {
+
+     public static void main (String [] args throws IOException) {
+     
+          List<Integer> upToHundred = Stream.iterate(0, x -> x + 1)
+                 .limit(100)
+                 .toList();
+
+          System.out.println(upToHundred);
+     }
+     
+}
+
+```
+
+### Collections Vs Streams
+
+- **Immutability** Collections are mutable, streams are not.
+- **Laziness** Collections operations are eager, strems are lazy
+- **Processing Intent**  Collection focus on storing, streams on processing and transforming.
+- **Parallelism** Collections are agnostic, while streams support it.
+
+### Limit & Filter Operation
+
+### limit()
+
+```java
+
+public class IntermediateOperations {
+
+      public static void main (String [] args) {
+           
+//         Stream <Integer> numbers = Stream.of(1,2,3,4,5,6,7,8,9,10);
+
+//         Stream<Integer> anotherStream  = numbers.limit(5);  // results in another stream.
+//         anotherStream.forEach(System.out::println);
+
+//         numbers.limit(5).forEach(System.out::println);
+
+           Stream.of(1,2,3,4,5,6,7,8,9,10)
+                 .limit(5)                       // creates another stream
+                 .forEach(System.out::println);     
+
+      }
+}
+
+```
+
+### filter() -> creates a new stream
+
+```java
+
+public class IntermediateOperations {
+
+      public static void main (String [] args) {
+/*           
+           Stream <Integer> numbers = Stream.of(1,2,3,4,5,6,7,8,9,10);          
+           Stream<Integer> evenStream = numbers.filter(x -> x % 2 == 0);  // takes in predicate
+           evenStream.forEach(System.out::println);
+*/
+           Stream.of(1,2,3,4,5,6,7,8,9,10)
+                 .filter(x -> x % 2 == 0)
+                 .forEach(System.out::println);     
+
+      }
+}
+
+```
+
+### filter() + limit()
+
+```java
+
+public class IntermediateOperations {
+
+      public static void main (String [] args) {
+/*           
+           Stream <Integer> numbers = Stream.of(1,2,3,4,5,6,7,8,9,10);          
+           Stream<Integer> evenStream = numbers.filter(x -> x % 2 == 0);  // takes in predicate
+           Stream<Integer> firstTwoEven = evenStream.limit(2);
+           firstTwoEven.forEach(System.out::println);
+*/
+           Stream.of(1,2,3,4,5,6,7,8,9,10)
+                 .filter(x -> x % 2 == 0)
+                 .limit(2)
+                 .forEach(System.out::println);     
+
+      }
+}
+
+```
+
+### map() -> allows you to change the element and put it into new stream
+
+```java
+
+public class IntermediateOperations {
+
+      public static void main (String [] args) {
+
+           Stream<String> names =  Stream.of("apple","banana","mango","strawberry");
+           names.map(String::toUpperCase).forEach(System.out::println);
+
+           //Print only first two fruits
+           names
+                .map(String::toUpperCase)
+                .limit(2)
+                .forEach(System.out::println);
+
+      }
+}
+
+```
+
+### Remove anything that is greater than 6 char using map()
+
+```java
+
+public class IntermediateOperations {
+
+      public static void main (String [] args) {
+
+           Stream<String> names =  Stream.of("apple","banana","mango","strawberry");
+           names
+               .map(String::toUpperCase)
+               .filter(name -> name.length() < 6)
+               .forEach(System.out::println);
+
+      }
+}
+
+```
+
+### Inroder to examine a stream in between use peek() -> takes in a consumer and return a stream
+
+```java
+
+public class IntermediateOperations {
+
+      public static void main (String [] args) {
+
+           Stream<String> names =  Stream.of("apple","banana","mango","strawberry");
+           names
+               .map(String::toUpperCase)
+               .peek(str -> System.out.println("Peek result: " + str))
+               .filter(name -> name.length() < 6)
+               .forEach(System.out::println);
+
+      }
+}
+
+```
+
+### Diff b/w peek() & forEach()
+
+- forEach() is a terminal/final operation
+- peek() is an intermediate operation
+
+
+### Streams Api are lazy 
+
+- They work only if there is someone to consume the result of their work.
+
+```java
+
+public class IntermediateOperations {
+
+      public static void main (String [] args) {
+
+           Stream<String> names =  Stream.of("apple","banana","mango","strawberry");
+           names
+               .map(String::toUpperCase)
+               .peek(str -> System.out.println("Peek result: " + str))  // peek() will not work as streams are lazy
+               .filter(name -> name.length() < 6)
+               // There has to be a terminal operation to consume its work.
+
+      }
+}
+
+```
+
+### distinct() operator
+
+```java
+
+public class IntermediateOperations {
+
+      public static void main (String [] args) {
+
+           Stream<String> numbers =  Stream.of(1,2,2,3,3,3,1,3,5,6,7,2,4,5,6,7);
+           numbers
+               .peek(num -> System.out.println("Peek result: " + num))
+               .distinct()
+               .forEach(System.out::println);
+      }
+}
+
+```
+
+### sorted() operator
+
+- intermediate operation
+- returns a new stream
+- sorted according to natural order (for 'Comparable') or using a provide Comparator
+- for large streams, sorting can be time taking
+- for infinite streams, it will never complete (kills memory)
+
+```java
+
+public class IntermediateOperations {
+
+      public static void main (String [] args) {
+
+           Stream<Integer> numbers =  Stream.of(1,2,2,3,3,3,1,3,5,6,7,2,4,5,6,7);
+           numbers
+               .peek(num -> System.out.println("Peek result: " + num))
+               .distinct()
+               .sorted()
+               .forEach(System.out::println);
+      }
+}
+
+```
+
+### Concatenate two streams
+
+```java
+
+public class IntermediateOperations {
+
+      public static void main (String [] args) {
+
+           Stream<Integer> oddNumbers =  Stream.of(1,3,5,7);
+           Stream<Integer> evenNumbers = Stream.of(2,4,6,8);
+           Stream.concat(oddNumbers, evenNumbers).forEach(System.out::println); // print all odd and then even
+
+      }
+}
+
+```
